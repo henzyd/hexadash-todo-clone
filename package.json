@@ -1,0 +1,11 @@
+{
+  "name": "hexadash-todo",
+  "version": "1.0.0",
+  "description": "this is a todo app that i am using to learn Nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "henzyd",
+  "license": "ISC"
+}

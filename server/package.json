@@ -4,8 +4,8 @@
   "description": "this is a todo app that i am using to learn Nodejs",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "prod": "node server.js",
+    "start:dev": "nodemon server.js",
+    "start:prod": "set NODE_ENV=production&& node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "henzyd",

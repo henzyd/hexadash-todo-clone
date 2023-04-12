@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "development") {
   mongoose
     .connect(
       process.env.PRODUCTION_DATABASE_CONNECTION_STRING.replace(
-        "<PASSWORD>",
+        "<password>",
         process.env.PRODUCTION_DB_PASSWORD
       )
     )

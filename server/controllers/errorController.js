@@ -37,6 +37,7 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
+    console.log("this is message > ", err.message);
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,

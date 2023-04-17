@@ -21,4 +21,29 @@ const signup = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { signup };
+const login = catchAsync(async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username }).select("+password");
+
+  if (!user || !(await user.passwordMatch(password))) {
+    return next(new AppError("Invalid credentials", 401));
+  }
+
+  const accessToken = signAccessToken(user._id);
+  const refreshToken = signRefreshToken(user._id);
+  user.refreshToken = refreshToken;
+  user.lastLogin = Date.now();
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      ...user.passwordRemove(),
+      accessToken,
+      refreshToken,
+    },
+  });
+});
+
+module.exports = { signup, login };

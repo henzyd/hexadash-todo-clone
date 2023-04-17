@@ -1,19 +1,22 @@
 const catchAsync = require("../utils/catchAsync");
 const { User } = require("../models/userModel");
+const { signRefreshToken, signAccessToken } = require("../utils/jwt");
 
 const signup = catchAsync(async (req, res, next) => {
   const { username, password } = req.body;
 
-  // if (!username || !password) {
-  //   return next(new AppError("Please provide username and password", 400));
-  // }
+  const user = User({ username, password });
+  user.refreshToken = signRefreshToken(user._id);
 
-  const user = await User.create({ username, password });
+  await user.save();
+
+  const accessToken = signAccessToken(user._id);
 
   res.status(201).json({
     status: "success",
     data: {
-      user: user.passwordRemove(),
+      ...user.passwordRemove(),
+      accessToken,
     },
   });
 });

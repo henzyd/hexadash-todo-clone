@@ -16,7 +16,6 @@ const getAllTodos = catchAsync(async (req, res, next) => {
 
 const createTodo = catchAsync(async (req, res, next) => {
   const { title } = req.body;
-  console.log(req.currentUser);
 
   const todo = Todo({ title, user: req.currentUser._id });
   await todo.save();
@@ -29,4 +28,24 @@ const createTodo = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { getAllTodos, createTodo };
+const completedTodo = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const todo = Todo.findOne({ id });
+
+  if (!todo) {
+    return next(new AppError("Todo not found", 404));
+  }
+
+  console.log(todo.completed);
+
+  todo.completed = !todo.completed;
+  await todo.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Todo updated",
+  });
+});
+
+module.exports = { getAllTodos, createTodo, completedTodo };

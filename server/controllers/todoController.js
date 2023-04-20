@@ -1,5 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 const Todo = require("../models/todoModel");
+const AppError = require("../utils/appError");
 
 const getAllTodos = catchAsync(async (req, res, next) => {
   const todos = await Todo.find({ user: req.currentUser._id }).populate({
@@ -31,21 +32,31 @@ const createTodo = catchAsync(async (req, res, next) => {
 const completedTodo = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  const todo = Todo.findOne({ id });
+  const todo = await Todo.findOneAndUpdate(
+    { _id: id },
+    { completed: true },
+    { new: true, runValidators: true }
+  );
 
   if (!todo) {
-    return next(new AppError("Todo not found", 404));
+    return next(new AppError("No todo found", 404));
   }
-
-  console.log(todo.completed);
-
-  todo.completed = !todo.completed;
-  await todo.save();
 
   res.status(200).json({
     status: "success",
-    message: "Todo updated",
+    data: todo,
   });
 });
 
-module.exports = { getAllTodos, createTodo, completedTodo };
+const deleteTodo = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  await Todo.findByIdAndDelete({ _id: id });
+
+  res.status(204).json({
+    status: "success",
+    message: "Todo deleted",
+  });
+});
+
+module.exports = { getAllTodos, createTodo, completedTodo, deleteTodo };

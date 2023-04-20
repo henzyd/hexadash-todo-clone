@@ -6,6 +6,7 @@ const AppError = require("./utils/appError");
 //? NOTE: import routes
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const todoRoute = require("./routes/todoRoute");
 
 //? NOTE: import middlewares
 const { protectedRoute } = require("./middlewares/authMiddleware");
@@ -27,6 +28,7 @@ app.get(`${baseRoute}/`, (req, res) => {
 });
 app.use(`${baseRoute}/auth`, authRoute);
 app.use(`${baseRoute}/users`, protectedRoute, userRoute);
+app.use(`${baseRoute}/todo`, protectedRoute, todoRoute);
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

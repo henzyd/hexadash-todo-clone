@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const AppError = require("../utils/appError");
 
 const userSchema = new mongoose.Schema(
   {
@@ -23,6 +22,12 @@ const userSchema = new mongoose.Schema(
       type: Date,
       required: false,
     },
+    todos: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Todo",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -48,4 +53,4 @@ userSchema.methods.passwordMatch = async function (password) {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { User };
+module.exports = User;

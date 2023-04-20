@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
-const { User } = require("../models/userModel");
+const User = require("../models/userModel");
 
 /**
  * Middleware function to check if a token is valid and has not expired
